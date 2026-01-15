@@ -1,7 +1,7 @@
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
 const bcrypt = require('bcryptjs');
-const User = require('./models/User'); // Ensure this path matches your file structure
+const User = require('./models/User');
 
 dotenv.config();
 
@@ -12,7 +12,7 @@ mongoose.connect(process.env.MONGO_URI)
 const createAdmin = async () => {
   try {
     // 1. Check if admin already exists
-    const existingAdmin = await User.findOne({ email: 'admin@darululoom.online' });
+    const existingAdmin = await User.findOne({ email: process.env.ADMIN_EMAIL });
     
     if (existingAdmin) {
       console.log('⚠️ Admin already exists!');
@@ -26,7 +26,7 @@ const createAdmin = async () => {
     // 3. Create the user
     await User.create({
       name: 'Moulvi Saab',
-      email: 'admin@darululoom.online',
+      email: process.env.ADMIN_EMAIL,
       password: hashedPassword,
       isAdmin: true
     });
