@@ -21,7 +21,7 @@ const createAdmin = async () => {
 
     // 2. Encrypt the password
     const salt = await bcrypt.genSalt(10);
-    const hashedPassword = await bcrypt.hash('admin@darululoom.online', salt); 
+    const hashedPassword = await bcrypt.hash(process.env.ADMIN_PASSWORD, salt); 
 
     // 3. Create the user
     await User.create({
