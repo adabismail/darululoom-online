@@ -1,0 +1,46 @@
+/* GLOBAL STYLES */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #f8f9fa; /* Very light gray background */
+  color: #333;
+}
+
+/* Headings use the Elegant 'Amiri' font */
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+  font-family: 'Amiri', serif;
+}
+
+/* Smooth Scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* HOVER EFFECTS FOR CARDS */
+.hover-effect {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  background: white;
+  border-radius: 12px; /* Softer corners */
+}
+
+.hover-effect:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 15px 30px rgba(0, 77, 64, 0.15) !important;
+  border-bottom: 4px solid #D4AF37; /* Gold highlight on hover */
+}
+
+/* NAVBAR LINKS */
+.nav-link {
+  font-weight: 500;
+  transition: color 0.2s;
+  letter-spacing: 0.5px;
+}
+
+.nav-link:hover {
+  color: #FFD700 !important; /* Gold color on hover */
+}
+
+/* BUTTONS */
+.btn {
+  border-radius: 50px; /* Pill shaped buttons */
+  padding: 10px 25px;
+}
