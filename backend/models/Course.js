@@ -4,15 +4,15 @@ const courseSchema = mongoose.Schema({
   title: {
     type: String,
     required: [true, 'Please add a course title'],
-    unique: true, // This ensures titles are unique
+    unique: true,
     trim: true
   },
-  // --- ADD THIS SECTION ---
+
   slug: {
     type: String,
     unique: true
   },
-  // ------------------------
+
   description: {
     type: String,
     required: [true, 'Please add a description']

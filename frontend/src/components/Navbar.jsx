@@ -6,8 +6,6 @@ const Navbar = () => {
   const handleLinkClick = () => {
     const navbarCollapse = document.getElementById('navbarNav');
     if (navbarCollapse && navbarCollapse.classList.contains('show')) {
-      // This is a manual way to toggle the Bootstrap collapse class in React
-      // Alternatively, you can use the bootstrap instance if imported, but this is lighter
       const bsCollapse = new window.bootstrap.Collapse(navbarCollapse, {
         toggle: true
       });

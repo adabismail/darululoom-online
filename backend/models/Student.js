@@ -6,14 +6,10 @@ const studentSchema = new mongoose.Schema({
   email: { type: String, required: true },
   phone: { type: String, required: true },
   courseAppliedFor: { type: String, required: true },
-  
-  // --- ADD THIS NEW FIELD ---
   status: { type: String, default: 'Pending' }, 
-  // --------------------------
-  
   isAdmitted: { type: Boolean, default: false },
 }, {
-  timestamps: true // This gives you createdAt automatically
+  timestamps: true
 });
 
 module.exports = mongoose.model('Student', studentSchema);

@@ -19,7 +19,7 @@ const AdminDashboard = () => {
     fee: '' 
   });
 
-  // 🔒 SECURITY HELPER: Creates the "ID Card" (Token Header)
+  // SECURITY HELPER
   const getAuthConfig = () => {
     return {
       headers: {
@@ -38,7 +38,7 @@ const AdminDashboard = () => {
 
   const fetchStudents = async () => {
     try {
-      // 🔒 SECURE REQUEST: We pass 'getAuthConfig()' here
+      //SECURE REQUEST
       const { data } = await axios.get('http://localhost:5000/api/admissions', getAuthConfig());
       setStudents(data);
     } catch (err) { 
@@ -52,7 +52,7 @@ const AdminDashboard = () => {
 
   const fetchCourses = async () => {
     try {
-      // Public request (Courses are usually public, so no token needed here)
+      // Public request
       const { data } = await axios.get('http://localhost:5000/api/courses');
       setCourses(data);
     } catch (err) { console.error("Error loading courses", err); }
@@ -62,7 +62,7 @@ const AdminDashboard = () => {
   const updateStatus = async (student, newStatus) => {
     if(!window.confirm(`Mark ${student.firstName} as ${newStatus}?`)) return;
     try {
-      // 🔒 SECURE REQUEST
+      //SECURE REQUEST
       await axios.put(
         `http://localhost:5000/api/admissions/${student._id}`, 
         { status: newStatus }, 
@@ -82,7 +82,7 @@ const AdminDashboard = () => {
   const handleDeleteStudent = async (id) => {
     if(!window.confirm('Delete this application?')) return;
     try {
-      // 🔒 SECURE REQUEST (Note: headers go in the 2nd argument for delete)
+      //SECURE REQUEST
       await axios.delete(`http://localhost:5000/api/admissions/${id}`, getAuthConfig());
       fetchStudents();
     } catch (error) { 
@@ -94,7 +94,7 @@ const AdminDashboard = () => {
   const handleAddCourse = async (e) => {
     e.preventDefault();
     try {
-      // 🔒 SECURE REQUEST
+      //SECURE REQUEST
       await axios.post('http://localhost:5000/api/courses', newCourse, getAuthConfig());
       
       alert('Course Added Successfully!');
@@ -109,7 +109,7 @@ const AdminDashboard = () => {
   const handleDeleteCourse = async (id) => {
     if(!window.confirm('Delete this course?')) return;
     try {
-      // 🔒 SECURE REQUEST
+      //SECURE REQUEST
       await axios.delete(`http://localhost:5000/api/courses/${id}`, getAuthConfig());
       fetchCourses();
     } catch (error) { alert('Error deleting course'); }

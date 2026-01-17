@@ -43,7 +43,7 @@ const Courses = () => {
                 <div className="card h-100 border-0 shadow-sm hover-effect">
                   <div className="card-header bg-white border-0 pt-4 pb-0 text-center">
                     <div className="mb-2">
-                       {/* Icon based on course title (simple logic) */}
+                       {/* Icon based on course title*/}
                        {course.title.toLowerCase().includes('hifz') ? <i className="bi bi-book fs-1 text-success"></i> :
                         course.title.toLowerCase().includes('tajweed') ? <i className="bi bi-mic fs-1 text-success"></i> :
                         <i className="bi bi-mortarboard fs-1 text-success"></i>}

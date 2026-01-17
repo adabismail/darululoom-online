@@ -121,11 +121,9 @@ const Home = () => {
             {/* Image Column */}
             <div className="col-md-5 text-center mb-4 mb-md-0">
               <div className="instructor-img-wrapper d-inline-block position-relative">
-                {/* Gold Circle Background Effect */}
                 <div className="position-absolute top-50 start-50 translate-middle rounded-circle" 
                      style={{ width: '102%', height: '102%', border: '3px solid #FFD700', zIndex: 0 }}></div>
                 
-                {/* Actual Image */}
                 <img 
                   src="/images/teacher.png" 
                   alt="Moulvi Sahib" 

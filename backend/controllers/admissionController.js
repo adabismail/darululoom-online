@@ -1,12 +1,11 @@
 const Student = require('../models/Student');
-
 // @desc    Register a new student (Admission Form)
 // @route   POST /api/admissions
 exports.registerStudent = async (req, res) => {
   try {
     const { firstName, lastName, email, phone, courseAppliedFor } = req.body;
 
-    // 1. COMPOUND CHECK: Block duplicate application for the SAME course only
+    // 1. COMPOUND CHECK
     const existingApplication = await Student.findOne({ 
       email: email, 
       courseAppliedFor: courseAppliedFor 
@@ -25,7 +24,7 @@ exports.registerStudent = async (req, res) => {
       email, 
       phone,
       courseAppliedFor,
-      status: 'Pending' // Default status
+      status: 'Pending'
     });
 
     res.status(201).json({
@@ -53,7 +52,6 @@ exports.getStudents = async (req, res) => {
 
 // @desc    Update student status (Approve/Reject)
 // @route   PUT /api/admissions/:id
-// --- THIS IS THE NEW FUNCTION YOU NEED ---
 exports.updateStudentStatus = async (req, res) => {
   try {
     const student = await Student.findById(req.params.id);
@@ -62,7 +60,7 @@ exports.updateStudentStatus = async (req, res) => {
       // 1. Update the text status ('Approved' or 'Rejected')
       student.status = req.body.status;
       
-      // 2. Update the boolean flag (Helper for simple checks)
+      // 2. Update the boolean flag
       student.isAdmitted = (req.body.status === 'Approved');
 
       const updatedStudent = await student.save();

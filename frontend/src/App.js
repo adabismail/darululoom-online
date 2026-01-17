@@ -7,7 +7,7 @@ import Admissions from './pages/Admissions';
 import Login from './pages/Login';
 import Courses from './pages/Courses';
 import PrivateRoute from './components/PrivateRoute';
-import { AuthProvider } from './context/AuthContext'; // <--- Import Context
+import { AuthProvider } from './context/AuthContext';
 import Home from './pages/Home';
 import './App.css';
 

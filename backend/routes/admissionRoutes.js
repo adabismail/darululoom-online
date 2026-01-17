@@ -5,10 +5,10 @@ const { registerStudent, getStudents, updateStudentStatus, deleteStudent } = req
 // Import the Bouncer
 const { protect } = require('../middleware/authMiddleware');
 
-// Public Route (Anyone can apply)
+// Public Route
 router.post('/', registerStudent);
 
-// Protected Routes (Only Admins can see/edit)
+// Protected Routes
 router.get('/', protect, getStudents);
 router.put('/:id', protect, updateStudentStatus);
 router.delete('/:id', protect, deleteStudent);

@@ -27,7 +27,7 @@ const WhatsAppBtn = () => {
         style={{
           width: '60px',
           height: '60px',
-          backgroundColor: '#25D366', // Official WhatsApp Green
+          backgroundColor: '#25D366',
           color: 'white',
           border: '2px solid white'
         }}
