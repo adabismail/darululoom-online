@@ -2,7 +2,7 @@ import React from 'react';
 
 const WhatsAppBtn = () => {
   // Your real number
-  const phoneNumber = "916006711641"; 
+  const phoneNumber = process.env.REACT_APP_ADMIN_PHONE; 
   const message = "Assalamu Alaikum, I am interested in joining Darul Uloom Online. Please guide me.";
 
   // Create the link

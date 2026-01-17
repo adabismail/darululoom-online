@@ -9,6 +9,7 @@ import Courses from './pages/Courses';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider } from './context/AuthContext'; // <--- Import Context
 import Home from './pages/Home';
+import './App.css';
 
 
 function App() {

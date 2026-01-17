@@ -139,10 +139,16 @@ const Admissions = () => {
                       <label className="form-label fw-bold text-muted small">PHONE / WHATSAPP</label>
                       <input type="text" name="phone" className="form-control bg-light border-0 py-2" onChange={handleChange} required />
                     </div>
-
-                    <button type="submit" className="btn btn-warning w-100 py-3 rounded-pill fw-bold shadow-sm" style={{ color: '#004d40' }}>
+                    
+                    <button 
+                      type="submit" 
+                      /* Added 'custom-green-hover' to the end of the class list vvv */
+                      className="btn btn-warning w-100 py-3 rounded-pill fw-bold shadow-sm custom-green-hover" 
+                      style={{ color: '#004d40', backgroundColor: '#FFD700', border: '2px solid #FFD700' }}
+                    >
                       Submit Application
                     </button>
+
                   </form>
                 )}
               </div>

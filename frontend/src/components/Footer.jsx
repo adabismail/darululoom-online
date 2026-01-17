@@ -30,7 +30,7 @@ const Footer = () => {
           <div className="col-md-4 mb-4">
             <h5 className="mb-3">Contact Us</h5>
             <p className="small text-white-50 mb-1">
-              <i className="bi bi-whatsapp me-2 text-success"></i> +91 916006711641
+              <i className="bi bi-whatsapp me-2 text-success"></i> +{process.env.REACT_APP_ADMIN_PHONE}
             </p>
             <p className="small text-white-50 mb-1">
               <i className="bi bi-envelope me-2 text-warning"></i> admissions@darululoom.online

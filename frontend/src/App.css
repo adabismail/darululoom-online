@@ -44,3 +44,28 @@ html {
   border-radius: 50px; /* Pill shaped buttons */
   padding: 10px 25px;
 }
+
+.btn-warning:hover {
+  background-color: transparent !important; /* See-through */
+  color: #FFD700 !important; /* Text becomes Gold */
+  border: 2px solid #FFD700 !important; /* Gold Border appears */
+}
+
+/* Footer Link Hover Effect */
+footer a.hover-white:hover {
+  color: #0dcaf0 !important; /* Bright Cyan/Blue */
+  text-decoration: underline !important;
+  opacity: 1 !important;
+}
+
+/* Letter spacing for small subheadings (about us)*/
+.tracking-wide {
+  letter-spacing: 2px;
+}
+
+/* Specific Hover Effect for the Submit Button */
+.custom-green-hover:hover {
+  background-color: #004d40 !important; /* Turns Brand Green */
+  color: #FFD700 !important; /* Text turns Gold */
+  border-color: #004d40 !important; /* Border turns Green to match */
+}

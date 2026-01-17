@@ -113,6 +113,60 @@ const Home = () => {
         </div>
       </div>
 
+      {/* --- MEET THE INSTRUCTOR SECTION --- */}
+      <div className="py-5" style={{ backgroundColor: '#fdfdfd' }}>
+        <div className="container">
+          <div className="row align-items-center justify-content-center">
+            
+            {/* Image Column */}
+            <div className="col-md-5 text-center mb-4 mb-md-0">
+              <div className="instructor-img-wrapper d-inline-block position-relative">
+                {/* Gold Circle Background Effect */}
+                <div className="position-absolute top-50 start-50 translate-middle rounded-circle" 
+                     style={{ width: '102%', height: '102%', border: '3px solid #FFD700', zIndex: 0 }}></div>
+                
+                {/* Actual Image */}
+                <img 
+                  src="/images/teacher.png" 
+                  alt="Moulvi Sahib" 
+                  className="img-fluid rounded-circle shadow-lg position-relative"
+                  style={{ width: '300px', height: '300px', objectFit: 'cover', border: '5px solid white', zIndex: 1, filter: 'contrast(1.1) blur(0.5px)', transform: 'translateZ(0)'}}
+                />
+              </div>
+            </div>
+
+            {/* Text Column */}
+            <div className="col-md-6 text-center text-md-start">
+              <span className="text-uppercase fw-bold text-muted small tracking-wide">
+                Head Instructor & Founder
+              </span>
+              <h2 className="display-6 fw-bold text-success mt-2 mb-3" style={{ fontFamily: 'Amiri, serif' }}>
+                Mufti Feroze Shah
+              </h2>
+              <div className="mb-4" style={{ width: '60px', height: '3px', backgroundColor: '#FFD700', margin: '0 auto 0 0' }}></div>
+              
+              <p className="lead text-dark">
+                "My goal is to make Quranic education accessible and personal for every student."
+              </p>
+              
+              <p className="text-muted">
+                With over <strong>X years of experience</strong> in teaching Tajweed and Islamic Studies, 
+                <strong>Mufti Feroze</strong> is dedicated to preserving the traditional methods of teaching while embracing modern online tools.
+              </p>
+
+              {/* Qualifications List */}
+              <ul className="list-unstyled mt-4 text-start d-inline-block">
+                <li className="mb-2"><i className="bi bi-check-circle-fill text-warning me-2"></i> Hafiz-ul-Quran</li>
+                <li className="mb-2"><i className="bi bi-check-circle-fill text-warning me-2"></i> Alim Degree from [Institution Name]</li>
+                <li className="mb-2"><i className="bi bi-check-circle-fill text-warning me-2"></i> Ijazah in Tajweed</li>
+              </ul>
+              
+            </div>
+
+          </div>
+        </div>
+      </div>
+
       {/* --- QURAN VERSE --- */}
       <div className="text-white py-5 text-center" style={{ backgroundColor: '#004d40' }}>
         <div className="container">

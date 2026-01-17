@@ -2,6 +2,18 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 
 const Navbar = () => {
+  // Function to collapse the navbar when a link is clicked (Fixes mobile UX)
+  const handleLinkClick = () => {
+    const navbarCollapse = document.getElementById('navbarNav');
+    if (navbarCollapse && navbarCollapse.classList.contains('show')) {
+      // This is a manual way to toggle the Bootstrap collapse class in React
+      // Alternatively, you can use the bootstrap instance if imported, but this is lighter
+      const bsCollapse = new window.bootstrap.Collapse(navbarCollapse, {
+        toggle: true
+      });
+      bsCollapse.hide();
+    }
+  };
   return (
     <nav className="navbar navbar-expand-lg navbar-dark sticky-top shadow" style={{ backgroundColor: '#004d40' }}> 
       <div className="container">
@@ -24,8 +36,8 @@ const Navbar = () => {
             </li>
             <li className="nav-item">
               {/* Login Button */}
-              <Link className="nav-link btn btn-warning text-dark fw-bold px-4 ms-lg-3 rounded-pill" to="/login" style={{ backgroundColor: '#FFD700', border: 'none' }}>
-                Login (Admin)
+              <Link className="btn btn-warning text-dark fw-bold px-4 ms-lg-3 rounded-pill" to="/login" style={{ backgroundColor: '#FFD700', border: 'none' }}>
+                Admin Login
               </Link>
             </li>
           </ul>
