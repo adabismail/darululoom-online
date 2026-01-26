@@ -21,7 +21,7 @@ const seedAdmin = async () => {
 
         // 3. Create the new Admin
         const adminUser = new User({
-            name: "Super Admin",
+            name: "Moulvi Sahab",
             email: process.env.ADMIN_EMAIL,
             password: hashedPassword,
             isAdmin: true,
