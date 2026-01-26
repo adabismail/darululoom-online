@@ -12,6 +12,10 @@ const AdminDashboard = () => {
   
   // --- COURSES STATE ---
   const [courses, setCourses] = useState([]);
+  
+  // --- EDITING STATE ---
+  const [editingCourseId, setEditingCourseId] = useState(null);
+
   const [newCourse, setNewCourse] = useState({ 
     title: '', 
     description: '', 
@@ -23,7 +27,7 @@ const AdminDashboard = () => {
   const getAuthConfig = () => {
     return {
       headers: {
-        Authorization: `Bearer ${admin?.token}`, // Sends the token from your login
+        Authorization: `Bearer ${admin?.token}`, 
       },
     };
   };
@@ -34,16 +38,15 @@ const AdminDashboard = () => {
       fetchStudents();
       fetchCourses();
     }
+    // eslint-disable-next-line
   }, [admin]);
 
   const fetchStudents = async () => {
     try {
-      //SECURE REQUEST
       const { data } = await axios.get('http://localhost:5000/api/admissions', getAuthConfig());
       setStudents(data);
     } catch (err) { 
       console.error("Error loading students", err);
-      // If the token is expired or fake, logout the user
       if (err.response?.status === 401) {
         logout();
       }
@@ -52,25 +55,21 @@ const AdminDashboard = () => {
 
   const fetchCourses = async () => {
     try {
-      // Public request
       const { data } = await axios.get('http://localhost:5000/api/courses');
       setCourses(data);
     } catch (err) { console.error("Error loading courses", err); }
   };
 
-  // --- Approve & Open WhatsApp ---
+  // --- ACTIONS ---
   const updateStatus = async (student, newStatus) => {
     if(!window.confirm(`Mark ${student.firstName} as ${newStatus}?`)) return;
     try {
-      //SECURE REQUEST
       await axios.put(
         `http://localhost:5000/api/admissions/${student._id}`, 
         { status: newStatus }, 
         getAuthConfig()
       );
-      
       fetchStudents(); 
-      
       if (newStatus === 'Approved') {
         const message = `Assalamu Alaikum ${student.firstName}, your admission for ${student.courseAppliedFor} has been APPROVED.`;
         window.open(`https://wa.me/${student.phone}?text=${encodeURIComponent(message)}`, '_blank');
@@ -78,39 +77,67 @@ const AdminDashboard = () => {
     } catch (error) { alert("Error updating status"); }
   };
 
-  // --- Delete Student ---
   const handleDeleteStudent = async (id) => {
     if(!window.confirm('Delete this application?')) return;
     try {
-      //SECURE REQUEST
       await axios.delete(`http://localhost:5000/api/admissions/${id}`, getAuthConfig());
       fetchStudents();
     } catch (error) { 
       console.error(error);
-      alert('Error deleting. Make sure backend route exists.'); 
+      alert('Error deleting.'); 
     }
   };
 
-  const handleAddCourse = async (e) => {
+  // --- UNIFIED SUBMIT (ADD OR UPDATE) ---
+  const handleCourseSubmit = async (e) => {
     e.preventDefault();
     try {
-      //SECURE REQUEST
-      await axios.post('http://localhost:5000/api/courses', newCourse, getAuthConfig());
+      if (editingCourseId) {
+        // UPDATE MODE
+        await axios.put(
+          `http://localhost:5000/api/courses/${editingCourseId}`, 
+          newCourse, 
+          getAuthConfig()
+        );
+        alert('Course Updated Successfully!');
+      } else {
+        // ADD MODE
+        await axios.post('http://localhost:5000/api/courses', newCourse, getAuthConfig());
+        alert('Course Added Successfully!');
+      }
       
-      alert('Course Added Successfully!');
+      // Reset Form
       setNewCourse({ title: '', description: '', duration: '', fee: '' }); 
+      setEditingCourseId(null);
       fetchCourses(); 
     } catch (error) { 
       console.error(error);
-      alert(error.response?.data?.message || 'Error adding course'); 
+      alert(error.response?.data?.message || 'Error saving course'); 
     }
+  };
+
+  // --- PREPARE EDIT ---
+  const handleEditClick = (course) => {
+    setEditingCourseId(course._id);
+    setNewCourse({
+      title: course.title,
+      description: course.description,
+      duration: course.duration,
+      fee: course.fee
+    });
+  };
+
+  // --- CANCEL EDIT ---
+  const handleCancelEdit = () => {
+    setEditingCourseId(null);
+    setNewCourse({ title: '', description: '', duration: '', fee: '' });
   };
 
   const handleDeleteCourse = async (id) => {
     if(!window.confirm('Delete this course?')) return;
     try {
-      //SECURE REQUEST
       await axios.delete(`http://localhost:5000/api/courses/${id}`, getAuthConfig());
+      if (editingCourseId === id) handleCancelEdit();
       fetchCourses();
     } catch (error) { alert('Error deleting course'); }
   };
@@ -202,10 +229,16 @@ const AdminDashboard = () => {
           {activeTab === 'courses' && (
             <div className="row">
               <div className="col-md-4 mb-4">
-                <div className="card shadow">
-                  <div className="card-header bg-dark text-white">Add New Course</div>
+                <div className={`card shadow ${editingCourseId ? 'border-primary' : 'border-success'}`}>
+                  
+                  {/* FIXED: Dynamic Header (Blue for Edit, Green for Add) */}
+                  <div className={`card-header text-white ${editingCourseId ? 'bg-primary' : 'bg-success'}`}>
+                    {editingCourseId ? 'Edit Course' : 'Add New Course'}
+                  </div>
+                  
                   <div className="card-body">
-                    <form onSubmit={handleAddCourse}>
+                    {/* FIXED: Correct Function Name */}
+                    <form onSubmit={handleCourseSubmit}>
                       <div className="mb-2">
                         <label>Course Title</label>
                         <input type="text" className="form-control" required value={newCourse.title} onChange={(e) => setNewCourse({...newCourse, title: e.target.value})} />
@@ -224,7 +257,18 @@ const AdminDashboard = () => {
                         <label>Description</label>
                         <textarea className="form-control" rows="3" required value={newCourse.description} onChange={(e) => setNewCourse({...newCourse, description: e.target.value})}></textarea>
                       </div>
-                      <button type="submit" className="btn btn-success w-100">Add Course</button>
+                      
+                      {/* FIXED: Dynamic Button Text */}
+                      <button type="submit" className={`btn w-100 ${editingCourseId ? 'btn-primary' : 'btn-success'}`}>
+                        {editingCourseId ? 'Update Course' : 'Add Course'}
+                      </button>
+
+                      {/* FIXED: Cancel Button */}
+                      {editingCourseId && (
+                        <button type="button" onClick={handleCancelEdit} className="btn btn-secondary w-100 mt-2">
+                          Cancel Edit
+                        </button>
+                      )}
                     </form>
                   </div>
                 </div>
@@ -235,12 +279,20 @@ const AdminDashboard = () => {
                   <div className="card-header bg-dark text-white">Existing Courses</div>
                   <ul className="list-group list-group-flush">
                     {courses.map(course => (
-                      <li key={course._id} className="list-group-item d-flex justify-content-between align-items-center">
+                      <li key={course._id} className={`list-group-item d-flex justify-content-between align-items-center ${editingCourseId === course._id ? 'bg-light border-start border-4 border-primary' : ''}`}>
                         <div>
                           <strong>{course.title}</strong>
                           <br /><small className="text-muted">{course.duration} • {course.fee}</small>
                         </div>
-                        <button onClick={() => handleDeleteCourse(course._id)} className="btn btn-sm btn-danger">Delete</button>
+                        <div>
+                          {/* FIXED: Added Edit Button Back */}
+                          <button onClick={() => handleEditClick(course)} className="btn btn-sm btn-outline-primary me-2">
+                             Edit
+                          </button>
+                          <button onClick={() => handleDeleteCourse(course._id)} className="btn btn-sm btn-danger">
+                            Delete
+                          </button>
+                        </div>
                       </li>
                     ))}
                     {courses.length === 0 && <li className="list-group-item text-muted">No courses added yet.</li>}

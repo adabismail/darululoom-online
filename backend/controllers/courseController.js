@@ -55,3 +55,36 @@ exports.deleteCourse = async (req, res) => {
     res.status(500).json({ message: error.message });
   }
 };
+
+
+// @desc    Update a course
+// @route   PUT /api/courses/:id
+exports.updateCourse = async (req, res) => {
+  try {
+    const { title, description, duration, fee } = req.body;
+    
+    // 1. Find the course
+    const course = await Course.findById(req.params.id);
+
+    if (course) {
+      // 2. Update fields
+      course.title = title || course.title;
+      course.description = description || course.description;
+      course.duration = duration || course.duration;
+      course.fee = fee || course.fee;
+
+      // 3. If title changed, update the slug too
+      if (title) {
+        course.slug = slugify(title, { lower: true, strict: true });
+      }
+
+      // 4. Save
+      const updatedCourse = await course.save();
+      res.json(updatedCourse);
+    } else {
+      res.status(404).json({ message: 'Course not found' });
+    }
+  } catch (error) {
+    res.status(400).json({ message: error.message });
+  }
+};
