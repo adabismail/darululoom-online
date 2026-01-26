@@ -148,14 +148,14 @@ const Home = () => {
               </p>
               
               <p className="text-muted">
-                With over <strong>X years of experience</strong> in teaching Tajweed and Islamic Studies, 
+                With over <strong>10 years of experience</strong> in teaching Tajweed and Islamic Studies, 
                 <strong>Mufti Feroze</strong> is dedicated to preserving the traditional methods of teaching while embracing modern online tools.
               </p>
 
               {/* Qualifications List */}
               <ul className="list-unstyled mt-4 text-start d-inline-block">
                 <li className="mb-2"><i className="bi bi-check-circle-fill text-warning me-2"></i> Hafiz-ul-Quran</li>
-                <li className="mb-2"><i className="bi bi-check-circle-fill text-warning me-2"></i> Alim Degree from [Institution Name]</li>
+                <li className="mb-2"><i className="bi bi-check-circle-fill text-warning me-2"></i> Alim Degree from Darul Uloom Deoband</li>
                 <li className="mb-2"><i className="bi bi-check-circle-fill text-warning me-2"></i> Ijazah in Tajweed</li>
               </ul>
               
