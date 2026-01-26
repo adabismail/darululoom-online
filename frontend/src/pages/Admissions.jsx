@@ -64,7 +64,7 @@ const Admissions = () => {
 
   const getWhatsAppLink = () => {
     if (!submittedData) return '#';
-    const adminNumber = "916006711641"; 
+    const adminNumber = process.env.REACT_APP_ADMIN_PHONE; 
     // Updated text to include Student Name
     const text = `Assalamu Alaikum. My name is ${submittedData.studentName}. I have just applied for the ${submittedData.courseAppliedFor} course. My registered phone is ${submittedData.phone}.`;
     return `https://wa.me/${adminNumber}?text=${encodeURIComponent(text)}`;
