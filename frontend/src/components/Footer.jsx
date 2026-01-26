@@ -43,9 +43,27 @@ const Footer = () => {
 
         <hr className="border-secondary" />
         
-        <div className="text-center small text-white-50">
+        {/* <div className="text-center small text-white-50">
           &copy; {new Date().getFullYear()} Darul Uloom Online. All Rights Reserved.
+        </div> */}
+        {/* --- COPYRIGHT & CREDIT SECTION --- */}
+        <div className="text-center small text-white-50">
+          <p className="mb-1">
+            &copy; {new Date().getFullYear()} Darul Uloom Online. All Rights Reserved.
+          </p>
+          <p className="mb-0">
+            Made with <span className="text-danger">❤️</span> by{' '}
+            <a 
+              href="https://github.com/adabismail" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="text-warning text-decoration-none fw-bold"
+            >
+              Adab Ismail
+            </a>
+          </p>
         </div>
+
       </div>
     </footer>
   );
