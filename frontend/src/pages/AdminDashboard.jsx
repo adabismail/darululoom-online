@@ -32,6 +32,9 @@ const AdminDashboard = () => {
     };
   };
 
+  // API URL Helper
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
   // Load Data
   useEffect(() => {
     if (admin) {
@@ -43,7 +46,7 @@ const AdminDashboard = () => {
 
   const fetchStudents = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/admissions', getAuthConfig());
+      const { data } = await axios.get(`${API_URL}/admissions`, getAuthConfig());
       setStudents(data);
     } catch (err) { 
       console.error("Error loading students", err);
@@ -55,23 +58,25 @@ const AdminDashboard = () => {
 
   const fetchCourses = async () => {
     try {
-      const { data } = await axios.get('http://localhost:5000/api/courses');
+      const { data } = await axios.get(`${API_URL}/courses`);
       setCourses(data);
     } catch (err) { console.error("Error loading courses", err); }
   };
 
   // --- ACTIONS ---
   const updateStatus = async (student, newStatus) => {
-    if(!window.confirm(`Mark ${student.firstName} as ${newStatus}?`)) return;
+    // FIX 1: Use 'studentName' instead of 'firstName'
+    if(!window.confirm(`Mark ${student.studentName} as ${newStatus}?`)) return;
     try {
       await axios.put(
-        `http://localhost:5000/api/admissions/${student._id}`, 
+        `${API_URL}/admissions/${student._id}`, 
         { status: newStatus }, 
         getAuthConfig()
       );
       fetchStudents(); 
       if (newStatus === 'Approved') {
-        const message = `Assalamu Alaikum ${student.firstName}, your admission for ${student.courseAppliedFor} has been APPROVED.`;
+        // FIX 2: Correct variable in WhatsApp message
+        const message = `Assalamu Alaikum ${student.studentName}, your admission for ${student.courseAppliedFor} has been APPROVED.`;
         window.open(`https://wa.me/${student.phone}?text=${encodeURIComponent(message)}`, '_blank');
       }
     } catch (error) { alert("Error updating status"); }
@@ -80,7 +85,7 @@ const AdminDashboard = () => {
   const handleDeleteStudent = async (id) => {
     if(!window.confirm('Delete this application?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/admissions/${id}`, getAuthConfig());
+      await axios.delete(`${API_URL}/admissions/${id}`, getAuthConfig());
       fetchStudents();
     } catch (error) { 
       console.error(error);
@@ -95,14 +100,14 @@ const AdminDashboard = () => {
       if (editingCourseId) {
         // UPDATE MODE
         await axios.put(
-          `http://localhost:5000/api/courses/${editingCourseId}`, 
+          `${API_URL}/courses/${editingCourseId}`, 
           newCourse, 
           getAuthConfig()
         );
         alert('Course Updated Successfully!');
       } else {
         // ADD MODE
-        await axios.post('http://localhost:5000/api/courses', newCourse, getAuthConfig());
+        await axios.post(`${API_URL}/courses`, newCourse, getAuthConfig());
         alert('Course Added Successfully!');
       }
       
@@ -136,7 +141,7 @@ const AdminDashboard = () => {
   const handleDeleteCourse = async (id) => {
     if(!window.confirm('Delete this course?')) return;
     try {
-      await axios.delete(`http://localhost:5000/api/courses/${id}`, getAuthConfig());
+      await axios.delete(`${API_URL}/courses/${id}`, getAuthConfig());
       if (editingCourseId === id) handleCancelEdit();
       fetchCourses();
     } catch (error) { alert('Error deleting course'); }
@@ -181,7 +186,9 @@ const AdminDashboard = () => {
                   <table className="table table-hover align-middle mb-0">
                     <thead className="table-light">
                       <tr>
-                        <th>Name / Phone</th>
+                        {/* UPDATE: New Table Headers */}
+                        <th>Student Details</th>
+                        <th>Address</th>
                         <th>Course</th>
                         <th>Status</th>
                         <th>Action</th>
@@ -192,10 +199,18 @@ const AdminDashboard = () => {
                     <tbody>
                       {students.map((std) => (
                         <tr key={std._id}>
+                          {/* COLUMN 1: Name, Father's Name, Phone */}
                           <td>
-                            <div className="fw-bold">{std.firstName} {std.lastName}</div>
-                            <small className="text-muted"><i className="bi bi-telephone"></i> {std.phone}</small>
+                            <div className="fw-bold">{std.studentName}</div>
+                            <small className="text-muted d-block">Father: {std.fatherName}</small>
+                            <small className="text-success"><i className="bi bi-telephone"></i> {std.phone}</small>
                           </td>
+                          
+                          {/* COLUMN 2: Address */}
+                          <td style={{ maxWidth: '200px' }}>
+                            <small className="text-secondary">{std.address}</small>
+                          </td>
+
                           <td><span className="badge bg-info text-dark">{std.courseAppliedFor}</span></td>
                           <td>
                             <span className={`badge ${std.status === 'Approved' ? 'bg-success' : std.status === 'Rejected' ? 'bg-danger' : 'bg-warning text-dark'}`}>
@@ -203,8 +218,8 @@ const AdminDashboard = () => {
                             </span>
                           </td>
                           <td>
-                            <button onClick={() => updateStatus(std, 'Approved')} className="btn btn-sm btn-outline-success me-1">✓</button>
-                            <button onClick={() => updateStatus(std, 'Rejected')} className="btn btn-sm btn-outline-danger">✗</button>
+                            <button onClick={() => updateStatus(std, 'Approved')} className="btn btn-sm btn-outline-success me-1" title="Approve">✓</button>
+                            <button onClick={() => updateStatus(std, 'Rejected')} className="btn btn-sm btn-outline-danger" title="Reject">✗</button>
                           </td>
                           <td>
                             <a href={`https://wa.me/${std.phone}`} target="_blank" rel="noreferrer" className="btn btn-success btn-sm">
@@ -218,6 +233,7 @@ const AdminDashboard = () => {
                           </td>
                         </tr>
                       ))}
+                      {students.length === 0 && <tr><td colSpan="7" className="text-center py-4 text-muted">No student applications yet.</td></tr>}
                     </tbody>
                   </table>
                 </div>
@@ -231,13 +247,12 @@ const AdminDashboard = () => {
               <div className="col-md-4 mb-4">
                 <div className={`card shadow ${editingCourseId ? 'border-primary' : 'border-success'}`}>
                   
-                  {/* FIXED: Dynamic Header (Blue for Edit, Green for Add) */}
+                  {/* Dynamic Header */}
                   <div className={`card-header text-white ${editingCourseId ? 'bg-primary' : 'bg-success'}`}>
                     {editingCourseId ? 'Edit Course' : 'Add New Course'}
                   </div>
                   
                   <div className="card-body">
-                    {/* FIXED: Correct Function Name */}
                     <form onSubmit={handleCourseSubmit}>
                       <div className="mb-2">
                         <label>Course Title</label>
@@ -258,12 +273,12 @@ const AdminDashboard = () => {
                         <textarea className="form-control" rows="3" required value={newCourse.description} onChange={(e) => setNewCourse({...newCourse, description: e.target.value})}></textarea>
                       </div>
                       
-                      {/* FIXED: Dynamic Button Text */}
+                      {/* Dynamic Button */}
                       <button type="submit" className={`btn w-100 ${editingCourseId ? 'btn-primary' : 'btn-success'}`}>
                         {editingCourseId ? 'Update Course' : 'Add Course'}
                       </button>
 
-                      {/* FIXED: Cancel Button */}
+                      {/* Cancel Button */}
                       {editingCourseId && (
                         <button type="button" onClick={handleCancelEdit} className="btn btn-secondary w-100 mt-2">
                           Cancel Edit
@@ -285,7 +300,6 @@ const AdminDashboard = () => {
                           <br /><small className="text-muted">{course.duration} • {course.fee}</small>
                         </div>
                         <div>
-                          {/* FIXED: Added Edit Button Back */}
                           <button onClick={() => handleEditClick(course)} className="btn btn-sm btn-outline-primary me-2">
                              Edit
                           </button>

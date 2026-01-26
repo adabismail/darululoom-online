@@ -3,25 +3,27 @@ const Student = require('../models/Student');
 // @route   POST /api/admissions
 exports.registerStudent = async (req, res) => {
   try {
-    const { firstName, lastName, email, phone, courseAppliedFor } = req.body;
+    const { studentName, fatherName, age, gender, address, phone, courseAppliedFor } = req.body;
 
     // 1. COMPOUND CHECK
     const existingApplication = await Student.findOne({ 
-      email: email, 
+      phone: phone, 
       courseAppliedFor: courseAppliedFor 
     });
 
     if (existingApplication) {
       return res.status(400).json({ 
-        message: `You have already applied for ${courseAppliedFor} with this email.` 
+        message: `A student with this phone number has already applied for ${courseAppliedFor}.` 
       });
     }
 
     // 2. Create new admission record
     const student = await Student.create({
-      firstName,
-      lastName,
-      email, 
+      studentName,
+      fatherName,
+      age,
+      gender,
+      address,
       phone,
       courseAppliedFor,
       status: 'Pending'
@@ -29,7 +31,7 @@ exports.registerStudent = async (req, res) => {
 
     res.status(201).json({
       _id: student._id,
-      firstName: student.firstName,
+      studentName: student.studentName,
       phone: student.phone, // Sending phone back for WhatsApp button
       courseAppliedFor: student.courseAppliedFor,
       message: 'Application Submitted Successfully'

@@ -11,6 +11,8 @@ const Login = () => {
   const { login, admin } = useContext(AuthContext);
   const navigate = useNavigate();
 
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
   // If already logged in, redirect to dashboard
   useEffect(() => {
     if (admin) {
@@ -21,7 +23,7 @@ const Login = () => {
   const submitHandler = async (e) => {
     e.preventDefault();
     try {
-      const { data } = await axios.post('http://localhost:5000/api/users/login', {
+      const { data } = await axios.post(`${API_URL}/users/login`, {
         email,
         password,
       });

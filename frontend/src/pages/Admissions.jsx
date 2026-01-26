@@ -8,10 +8,14 @@ const Admissions = () => {
   const incomingCourse = location.state?.courseTitle || '';
 
   const [courses, setCourses] = useState([]);
+  
+  // UPDATED FORM STATE
   const [formData, setFormData] = useState({
-    firstName: '',
-    lastName: '',
-    email: '',
+    studentName: '',
+    fatherName: '',
+    age: '',
+    gender: 'Male', // Default value
+    address: '',
     phone: '',
     courseAppliedFor: incomingCourse 
   });
@@ -19,11 +23,13 @@ const Admissions = () => {
   const [submittedData, setSubmittedData] = useState(null);
   const [error, setError] = useState('');
 
-  // Fetch Courses
+  // API URL Helper
+  const API_URL = process.env.REACT_APP_API_URL || 'http://localhost:5000/api';
+
   useEffect(() => {
     const fetchCourses = async () => {
       try {
-        const { data } = await axios.get('http://localhost:5000/api/courses');
+        const { data } = await axios.get(`${API_URL}/courses`);
         setCourses(data);
         if (!incomingCourse && data.length > 0) {
           setFormData(prev => ({ ...prev, courseAppliedFor: data[0].title }));
@@ -31,7 +37,7 @@ const Admissions = () => {
       } catch (err) { console.error("Error fetching courses", err); }
     };
     fetchCourses();
-  }, [incomingCourse]);
+  }, [incomingCourse, API_URL]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -40,8 +46,16 @@ const Admissions = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     setError(''); 
+    
+    // --- NEW VALIDATION CHECK ---
+  if (formData.age < 0) { // Assuming 4 is the minimum age for a madrasa
+    setError("Please enter a valid age");
+    return;
+  }
+  // ----------------------------
+
     try {
-      const res = await axios.post('http://localhost:5000/api/admissions', formData);
+      const res = await axios.post(`${API_URL}/admissions`, formData);
       setSubmittedData({ ...formData, ...res.data });
     } catch (err) {
       setError(err.response?.data?.message || 'Something went wrong. Please try again.');
@@ -51,7 +65,8 @@ const Admissions = () => {
   const getWhatsAppLink = () => {
     if (!submittedData) return '#';
     const adminNumber = "916006711641"; 
-    const text = `Assalamu Alaikum. My name is ${submittedData.firstName}. I have just applied for the ${submittedData.courseAppliedFor} course. My registered phone is ${submittedData.phone}.`;
+    // Updated text to include Student Name
+    const text = `Assalamu Alaikum. My name is ${submittedData.studentName}. I have just applied for the ${submittedData.courseAppliedFor} course. My registered phone is ${submittedData.phone}.`;
     return `https://wa.me/${adminNumber}?text=${encodeURIComponent(text)}`;
   };
 
@@ -81,11 +96,11 @@ const Admissions = () => {
                       <i className="bi bi-check-circle-fill text-success" style={{ fontSize: '4rem' }}></i>
                     </div>
                     <h3 className="fw-bold text-success mb-3">Application Received!</h3>
-                    <p className="text-muted">Your details have been securely recorded.</p>
+                    <p className="text-muted">JazakAllah Khair, {submittedData.studentName}.</p>
                     
                     <div className="alert alert-light border shadow-sm my-4 text-start">
                       <small className="text-muted d-block fw-bold">Next Step:</small>
-                      Please click the button below to send a confirmation message to our Admin via WhatsApp. This will finalize your seat.
+                      Please click the button below to send a confirmation message to our Admin via WhatsApp.
                     </div>
                     
                     <a 
@@ -103,15 +118,10 @@ const Admissions = () => {
                   <form onSubmit={handleSubmit}>
                     {error && <div className="alert alert-danger rounded-3">{error}</div>}
                     
+                    {/* 1. Course Selection */}
                     <div className="mb-4">
                       <label className="form-label fw-bold text-muted small">SELECT COURSE</label>
-                      <select 
-                        name="courseAppliedFor" 
-                        className="form-select form-select-lg bg-light border-0" 
-                        value={formData.courseAppliedFor} 
-                        onChange={handleChange}
-                        required
-                      >
+                      <select name="courseAppliedFor" className="form-select form-select-lg bg-light border-0" value={formData.courseAppliedFor} onChange={handleChange} required>
                         {courses.length === 0 && <option value="">Loading courses...</option>}
                         {courses.map(course => (
                           <option key={course._id} value={course.title}>{course.title}</option>
@@ -119,30 +129,47 @@ const Admissions = () => {
                       </select>
                     </div>
 
+                    {/* 2. Student Name */}
+                    <div className="mb-3">
+                      <label className="form-label fw-bold text-muted small">STUDENT NAME</label>
+                      <input type="text" name="studentName" className="form-control bg-light border-0 py-2" onChange={handleChange} required />
+                    </div>
+
+                    {/* 3. Father's Name */}
+                    <div className="mb-3">
+                      <label className="form-label fw-bold text-muted small">FATHER'S NAME</label>
+                      <input type="text" name="fatherName" className="form-control bg-light border-0 py-2" onChange={handleChange} required />
+                    </div>
+
+                    {/* 4. Age & Gender (Row) */}
                     <div className="row g-3 mb-3">
                       <div className="col-md-6">
-                        <label className="form-label fw-bold text-muted small">FIRST NAME</label>
-                        <input type="text" name="firstName" className="form-control bg-light border-0 py-2" onChange={handleChange} required />
+                        <label className="form-label fw-bold text-muted small">AGE</label>
+                        <input type="number" name="age" min="0" max="100" className="form-control bg-light border-0 py-2" placeholder="e.g. 12" onChange={handleChange} required />
                       </div>
                       <div className="col-md-6">
-                        <label className="form-label fw-bold text-muted small">LAST NAME</label>
-                        <input type="text" name="lastName" className="form-control bg-light border-0 py-2" onChange={handleChange} required />
+                        <label className="form-label fw-bold text-muted small">GENDER</label>
+                        <select name="gender" className="form-select bg-light border-0 py-2" onChange={handleChange} value={formData.gender}>
+                          <option value="Male">Male</option>
+                          <option value="Female">Female</option>
+                        </select>
                       </div>
                     </div>
 
+                    {/* 5. Address */}
                     <div className="mb-3">
-                      <label className="form-label fw-bold text-muted small">EMAIL ADDRESS</label>
-                      <input type="email" name="email" className="form-control bg-light border-0 py-2" onChange={handleChange} required />
+                      <label className="form-label fw-bold text-muted small">ADDRESS</label>
+                      <textarea name="address" className="form-control bg-light border-0 py-2" rows="2" onChange={handleChange} required></textarea>
                     </div>
 
+                    {/* 6. Mobile Number */}
                     <div className="mb-4">
-                      <label className="form-label fw-bold text-muted small">PHONE / WHATSAPP</label>
-                      <input type="text" name="phone" className="form-control bg-light border-0 py-2" onChange={handleChange} required />
+                      <label className="form-label fw-bold text-muted small">MOBILE NUMBER</label>
+                      <input type="text" name="phone" className="form-control bg-light border-0 py-2" placeholder="e.g. +91..." onChange={handleChange} required />
                     </div>
                     
                     <button 
                       type="submit" 
-                      /* Added 'custom-green-hover' to the end of the class list vvv */
                       className="btn btn-warning w-100 py-3 rounded-pill fw-bold shadow-sm custom-green-hover" 
                       style={{ color: '#004d40', backgroundColor: '#FFD700', border: '2px solid #FFD700' }}
                     >
