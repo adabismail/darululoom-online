@@ -55,15 +55,30 @@ const InstallPopup = () => {
         <div className="d-flex align-items-center gap-3">
           {/* Logo Icon */}
           <div style={{ 
-            width: '50px', 
-            height: '50px', 
-            background: '#00332a', 
-            borderRadius: '12px',
+            width: '56px', 
+            height: '56px', 
+            background: '#fffff', 
+            borderRadius: '14px',
             display: 'flex', 
             alignItems: 'center', 
-            justifyContent: 'center' 
+            justifyContent: 'center' ,
+            boxShadow: `
+              0 4px 10px rgba(0, 0, 0, 0.25),
+              0 1px 3px rgba(0, 0, 0, 0.25)
+            `,
+            overflow: 'hidden'
+
           }}>
-            <span style={{ fontSize: '24px' }}>🕌</span>
+            <img
+              src="/images/favicon.png"
+              alt="App icon"
+              style={{
+                width: '28px',
+                height: '28px',
+                objectFit: 'contain',
+                transform: 'scale(2.7)'
+              }}
+            />
           </div>
           
           <div>
