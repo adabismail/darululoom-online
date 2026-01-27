@@ -71,12 +71,12 @@ const InstallPopup = () => {
           }}>
             <img
               src="/images/favicon.png"
-              alt="App icon"
+              alt="Darul Uloom Online"
               style={{
                 width: '28px',
                 height: '28px',
                 objectFit: 'contain',
-                transform: 'scale(2.7)'
+                transform: 'scale(1.7)'
               }}
             />
           </div>
