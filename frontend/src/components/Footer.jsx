@@ -33,7 +33,7 @@ const Footer = () => {
               <i className="bi bi-whatsapp me-2 text-success"></i> +{process.env.REACT_APP_ADMIN_PHONE}
             </p>
             <p className="small text-white-50 mb-1">
-              <i className="bi bi-envelope me-2 text-warning"></i> admissions@darululoom.online
+              <i className="bi bi-envelope me-2 text-warning"></i> darululoom.online786@gmail.com
             </p>
             <p className="small text-white-50">
               <i className="bi bi-geo-alt me-2 text-info"></i> Online Campus
@@ -43,9 +43,6 @@ const Footer = () => {
 
         <hr className="border-secondary" />
         
-        {/* <div className="text-center small text-white-50">
-          &copy; {new Date().getFullYear()} Darul Uloom Online. All Rights Reserved.
-        </div> */}
         {/* --- COPYRIGHT & CREDIT SECTION --- */}
         <div className="text-center small text-white-50">
           <p className="mb-1">

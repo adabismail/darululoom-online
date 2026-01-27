@@ -5,15 +5,16 @@ const InstallPopup = () => {
   const [isVisible, setIsVisible] = useState(false);
 
   useEffect(() => {
-    // 1. Listen for the browser saying "Hey, this can be installed!"
     const handler = (e) => {
-      // Prevent the mini-infobar from appearing automatically
+      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      // Stash the event so we can trigger it later
+      // Stash the event so it can be triggered later.
       setDeferredPrompt(e);
-      setTimeout(() =>{
+      
+      // Wait 4 seconds after the site loads to show the popup
+      setTimeout(() => {
         setIsVisible(true);
-      }, 2000)
+      }, 4000);
     };
 
     window.addEventListener('beforeinstallprompt', handler);
@@ -23,86 +24,102 @@ const InstallPopup = () => {
 
   const handleInstallClick = async () => {
     if (!deferredPrompt) return;
-
-    // 2. Show the native browser install prompt
+    
+    // Show the install prompt
     deferredPrompt.prompt();
-
-    // 3. Wait for the user to respond to the prompt
+    
+    // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
     
-    // 4. Reset everything
+    // We've used the prompt, and can't use it again
     setDeferredPrompt(null);
     setIsVisible(false);
-
-    if (outcome === 'accepted') {
-      console.log('User accepted the install prompt');
-    }
   };
 
+  const handleDismiss = () => {
+    // This hides the popup for the current session. 
+    // It will only come back if the user refreshes the page.
+    setIsVisible(false);
+  };
+
+  // If not visible, we return nothing (No popup and No green spacer)
   if (!isVisible) return null;
 
   return (
-    <div 
-      className="fixed-bottom p-3 shadow-lg" 
-      style={{ 
-        backgroundColor: 'white', 
-        borderTop: '4px solid #00332a', 
-        zIndex: 9999,
-        animation: 'slideUp 0.5s ease-out'
-      }}
-    >
-      <div className="container d-flex align-items-center justify-content-between">
-        <div className="d-flex align-items-center gap-3">
-          {/* Logo Icon */}
-          <div style={{ 
-            width: '56px', 
-            height: '56px', 
-            background: '#fffff', 
-            borderRadius: '14px',
-            display: 'flex', 
-            alignItems: 'center', 
-            justifyContent: 'center' ,
-            boxShadow: `
-              0 4px 10px rgba(0, 0, 0, 0.25),
-              0 1px 3px rgba(0, 0, 0, 0.25)
-            `,
-            overflow: 'hidden'
-
-          }}>
-            <img
-              src="/images/favicon.png"
-              alt="Darul Uloom Online"
-              style={{
-                width: '28px',
-                height: '28px',
-                objectFit: 'contain',
-                transform: 'scale(1.7)'
-              }}
-            />
-          </div>
+    <>
+      {/* --- THE POPUP --- */}
+      <div 
+        className="fixed-bottom p-3" 
+        style={{ 
+          bottom: '20px',
+          left: '20px',
+          right: '20px',
+          margin: '0 auto',
+          maxWidth: '500px',
           
-          <div>
-            <h6 className="fw-bold mb-0">Install Darul Uloom App</h6>
-            <small className="text-muted">Get faster access & generic updates!</small>
+          backgroundColor: 'rgba(255, 255, 255, 0.98)', 
+          borderRadius: '20px',
+          border: '1px solid #e0e0e0',
+          borderTop: '5px solid #00332a', 
+          
+          boxShadow: '0 8px 30px rgba(0,0,0,0.12)',
+          zIndex: 10000,
+          animation: 'slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1)',
+          backdropFilter: 'blur(10px)'
+        }}
+      >
+        <div className="d-flex align-items-center justify-content-between gap-3">
+          <div className="d-flex align-items-center gap-3">
+            <div style={{ 
+              minWidth: '50px', width: '50px', height: '50px', 
+              background: '#ffffff', borderRadius: '12px',
+              display: 'flex', alignItems: 'center', justifyContent: 'center',
+              boxShadow: '0 2px 8px rgba(0,0,0,0.1)', border: '1px solid #f0f0f0'
+            }}>
+
+              <img src="/images/favicon.png" alt="Icon" style={{ width: '32px', height: '32px', objectFit: 'contain' }} />
+            </div>
+            <div style={{ lineHeight: '1.2' }}>
+              <h6 className="fw-bold mb-0 text-dark" style={{ fontSize: '0.95rem' }}>Install App</h6>
+              <small className="text-muted" style={{ fontSize: '0.75rem' }}>Faster access to courses!</small>
+            </div>
+          </div>
+          <div className="d-flex gap-2">
+            <button 
+              className="btn btn-sm text-secondary fw-bold"
+              style={{ backgroundColor: '#f5f5f5', borderRadius: '20px', border: 'none' }}
+              onClick={handleDismiss} 
+            >
+              Not Now
+            </button>
+            <button 
+              className="btn btn-sm text-white fw-bold"
+              style={{ 
+                backgroundColor: '#00332a', 
+                borderRadius: '20px', 
+                padding: '6px 16px', 
+                boxShadow: '0 4px 12px rgba(0, 51, 42, 0.3)' 
+              }}
+              onClick={handleInstallClick}
+            >
+              Install
+            </button>
           </div>
         </div>
-
-        <div className="d-flex gap-2">
-          <button 
-            className="btn btn-outline-secondary btn-sm"
-            onClick={() => setIsVisible(false)} // Dismiss for this session
-          >
-            Not Now
-          </button>
-          <button 
-            className="btn btn-success btn-sm fw-bold"
-            onClick={handleInstallClick}
-          >
-            Install
-          </button>
-        </div>
+        <style>{`
+          @keyframes slideUp { from { transform: translateY(100px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        `}</style>
       </div>
-    </div>
+
+      {/* --- THE GREEN SPACER (Static Element) --- */}
+
+      <div style={{ 
+        height: '130px', 
+        width: '100%', 
+        backgroundColor: '#00332a', 
+        transition: 'height 0.3s ease'
+      }} />
+    </>
   );
 };
 
