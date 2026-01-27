@@ -9,6 +9,7 @@ import Courses from './pages/Courses';
 import PrivateRoute from './components/PrivateRoute';
 import { AuthProvider } from './context/AuthContext';
 import Home from './pages/Home';
+import InstallPopup from './components/InstallPopup';
 import './App.css';
 
 
@@ -36,6 +37,7 @@ function App() {
             </Route>
 
           </Routes>
+          <InstallPopup />
           <WhatsAppBtn />
         </div>
       </Router>
