@@ -69,3 +69,14 @@ footer a.hover-white:hover {
   color: #FFD700 !important; /* Text turns Gold */
   border-color: #004d40 !important; /* Border turns Green to match */
 }
+
+/* Footer credit link hover */
+.footer-credit {
+  color: #FFD700;
+  transition: color 0.2s ease, text-decoration-color 0.2s ease;
+}
+
+.footer-credit:hover {
+  color:  #FF6F61; /* subtle bootstrap blue */
+  text-decoration: underline !important;
+}

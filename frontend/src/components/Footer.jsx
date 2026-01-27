@@ -52,12 +52,12 @@ const Footer = () => {
             &copy; {new Date().getFullYear()} Darul Uloom Online. All Rights Reserved.
           </p>
           <p className="mb-0">
-            Made with <span className="text-danger">❤️</span> by{' '}
+            Developed by{' '}
             <a 
               href="https://github.com/adabismail" 
               target="_blank" 
               rel="noopener noreferrer"
-              className="text-warning text-decoration-none fw-bold"
+              className="text-decoration-none fw-semibold footer-credit"
             >
               Adab Ismail
             </a>
