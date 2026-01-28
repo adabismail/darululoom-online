@@ -1,6 +1,8 @@
 # 🏫 Darul Uloom - School Management System
 
-A full-stack **MERN (MongoDB, Express, React, Node.js)** application designed to manage the operations of an Islamic educational institute (Darul Uloom). This system allows administrators ("Moulvi Sahab") to manage students, courses, and content dynamically.
+Darul Uloom Online is a full-stack **MERN (MongoDB, Express, React, Node.js)** web application built to manage the digital operations of an Islamic educational institute. The platform enables administrators to manage courses and content efficiently while providing a simple, accessible interface for students and visitors.
+
+This application was developed as a freelance client project, with a focus on real-world requirements, production deployment, and long-term maintainability.
 
 ### 🚀 Live Website
 * **🔗 Website:** [https://darululoom.online](https://darululoom.online)
@@ -10,12 +12,13 @@ A full-stack **MERN (MongoDB, Express, React, Node.js)** application designed to
 
 ## ✨ Features
 
-* **👨‍💼 Admin Dashboard:** Secure login for the administrator to manage the entire system.
-* **📚 Course Management:** Add, edit, and delete courses dynamically.
-* **📝 Student/User View:** Visitors can view course details, about sections, and contact information.
-* **🔐 Authentication:** Secure JWT (JSON Web Token) authentication for admin routes.
-* **📱 Responsive Design:** Fully optimized for mobile and desktop screens.
-* **☁️ Cloud Database:** Data is stored securely on MongoDB Atlas.
+* **👨‍💼 Admin Dashboard:** Secure authentication-based access for administrators to manage system data.
+* **📚 Course Management:** Create, update, and delete courses dynamically.
+* **🌐 Public User Interface** Visitors can view course details, about sections, and contact information.
+* **🔐 Authentication:** JWT-based authentication for protected admin routes.
+* **💻📱 Responsive Design:** Fully optimized for mobile and desktop screens.
+* **☁️ Cloud Database:** Persistent data storage using MongoDB Atlas.
+* **📲Progressive Web App (PWA):** Supports app installation with a custom in-app install prompt on supported browsers, providing an app-like experience.
 
 ---
 
@@ -34,8 +37,8 @@ Follow these steps to run the project locally on your machine.
 
 ### 1. Clone the Repository
 ```bash
-git clone [https://github.com/YOUR_GITHUB_USERNAME/darul-uloom.git](https://github.com/YOUR_GITHUB_USERNAME/darul-uloom.git)
-cd darul-uloom
+git clone https://github.com/adabismail/darululoom-online.git
+cd darululoom-online
 ```
 ### 2. Backend Setup
 Navigate to the backend folder and install dependencies:
@@ -50,7 +53,7 @@ Create a .env file in the backend folder and add your credentials:
 MONGO_URI=your_mongodb_connection_string
 PORT=5000
 JWT_SECRET=your_secret_key
-ADMIN_EMAIL=admin@example.com
+ADMIN_EMAIL=example@example.com
 ADMIN_PASSWORD=your_admin_password
 ADMIN_PHONE=your_admin_phone
 ```
@@ -84,6 +87,6 @@ To access the admin panel, navigate to /login.
 
 ---
 
-### **Made with ❤️ by Adab Ismail**
+### **Developed by Adab Ismail**
 
 
